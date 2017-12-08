@@ -3,6 +3,7 @@ from numpy import array, asarray
 from scipy import signal, fftpack
 
 FORMATS = ("B", "h", "no_support_for_24bit", "i")
+NORMALIZATION_CONSTANT = 32767  # equal to (2<<15)/2-1
 
 dry_wav = wave.openfp(sys.argv[1], 'rb')
 dry_params = dry_wav.getparams()
@@ -25,7 +26,7 @@ fft2 = fftpack.fftn(asarray(IR_array), shape)
 output = fftpack.ifftn(fft1 * fft2)[[slice(0, int(x)) for x in shape]].copy().real
 
 # normalization
-output = output / max(abs(numpy.amax(output)), abs(numpy.amin(output))) * (((2<<15)/2)-1)
+output = output / max(abs(numpy.amax(output)), abs(numpy.amin(output))) * NORMALIZATION_CONSTANT
 
 output_wav = wave.openfp(sys.argv[3], 'wb')
 output_wav.setparams(dry_params)
