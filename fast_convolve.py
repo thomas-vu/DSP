@@ -25,7 +25,7 @@ fft2 = fftpack.fftn(asarray(IR_array), shape)
 output = fftpack.ifftn(fft1 * fft2)[[slice(0, int(x)) for x in shape]].copy().real
 
 # normalization
-output = output / max(abs(numpy.amax(output)), abs(numpy.amin(output))) * ((2**16/2)-1)
+output = output / max(abs(numpy.amax(output)), abs(numpy.amin(output))) * (((2<<15)/2)-1)
 
 output_wav = wave.openfp(sys.argv[3], 'wb')
 output_wav.setparams(dry_params)
